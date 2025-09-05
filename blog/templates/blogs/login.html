@@ -1,0 +1,218 @@
+{% extends "blogs/base_dynamic.html" %}
+
+{% block title %}Login - My Dynamic Blog{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center min-vh-100">
+    <div class="col-lg-5 col-md-6 col-sm-8">
+        <div class="card shadow-lg" style="background-color: #ffffff; border-radius: 20px; border: none; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+            <!-- Header Section -->
+            <div class="card-header text-center py-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+                <div class="mb-3">
+                    <i class="fas fa-sign-in-alt fa-3x mb-3" style="opacity: 0.9;"></i>
+                </div>
+                <h2 class="mb-2 fw-bold" style="font-size: 2rem;">Welcome Back</h2>
+                <p class="mb-0 opacity-75">Sign in to your account to continue</p>
+            </div>
+
+            <!-- Tab Switch -->
+            <div class="px-4 pt-4">
+                <div class="d-flex" style="background-color: #f8f9fa; border-radius: 12px; padding: 4px;">
+                    <a href="{% url 'login' %}" class="flex-fill text-center py-3 px-4 text-decoration-none fw-bold active" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; transition: all 0.3s ease;">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                    <a href="{% url 'signup' %}" class="flex-fill text-center py-3 px-4 text-decoration-none fw-bold" style="color: #6c757d; border-radius: 8px; transition: all 0.3s ease;">
+                        <i class="fas fa-user-plus me-2"></i>Sign Up
+                    </a>
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <!-- Username Field -->
+                    <div class="mb-4">
+                        <label for="{{ form.username.id_for_label }}" class="form-label fw-bold" style="color: #2c3e50; font-size: 1rem;">
+                            <i class="fas fa-user me-2" style="color: #667eea;"></i>Username
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text" style="background-color: #667eea; color: white; border: none; border-radius: 10px 0 0 10px;">
+                                <i class="fas fa-at"></i>
+                            </span>
+                            {{ form.username }}
+                        </div>
+                        {% if form.username.errors %}
+                            <div class="text-danger mt-2">
+                                <i class="fas fa-exclamation-triangle me-1"></i>
+                                {% for error in form.username.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="mb-3">
+                        <label for="{{ form.password.id_for_label }}" class="form-label fw-bold" style="color: #2c3e50; font-size: 1rem;">
+                            <i class="fas fa-lock me-2" style="color: #667eea;"></i>Password
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text" style="background-color: #667eea; color: white; border: none; border-radius: 10px 0 0 10px;">
+                                <i class="fas fa-key"></i>
+                            </span>
+                            {{ form.password }}
+                        </div>
+                        {% if form.password.errors %}
+                            <div class="text-danger mt-2">
+                                <i class="fas fa-exclamation-triangle me-1"></i>
+                                {% for error in form.password.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rememberMe" style="border-color: #667eea;">
+                            <label class="form-check-label" for="rememberMe" style="color: #6c757d; font-size: 0.9rem;">
+                                Remember me
+                            </label>
+                        </div>
+                        <a href="#" class="text-decoration-none fw-bold" style="color: #667eea; font-size: 0.9rem;">
+                            <i class="fas fa-question-circle me-1"></i>Forgot Password?
+                        </a>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary w-100 py-3 mb-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 12px; font-weight: 700; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); transition: all 0.3s ease;">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                    </button>
+                </form>
+
+                <!-- Social Login Options -->
+                <div class="text-center mb-4">
+                    <div class="position-relative">
+                        <hr style="border-color: #e9ecef;">
+                        <span class="position-absolute top-50 start-50 translate-middle px-3" style="background-color: white; color: #6c757d; font-size: 0.9rem;">
+                            or continue with
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row g-2 mb-4">
+                    <div class="col-6">
+                        <button class="btn btn-outline-secondary w-100 py-2" style="border-radius: 8px; border-color: #e9ecef;">
+                            <i class="fab fa-google me-2" style="color: #dc3545;"></i>Google
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-outline-secondary w-100 py-2" style="border-radius: 8px; border-color: #e9ecef;">
+                            <i class="fab fa-facebook me-2" style="color: #1877f2;"></i>Facebook
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sign Up Link -->
+                <div class="text-center">
+                    <p class="mb-0" style="color: #6c757d;">
+                        Don't have an account?
+                        <a href="{% url 'signup' %}" class="text-decoration-none fw-bold ms-1" style="color: #667eea;">
+                            <i class="fas fa-arrow-right me-1"></i>Create one now
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-4">
+            <small class="text-muted">
+                <i class="fas fa-shield-alt me-1"></i>
+                Your data is secure with us
+            </small>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Form styling */
+    .form-control {
+        border: 2px solid #e1e4e8;
+        border-radius: 0 10px 10px 0;
+        padding: 12px 16px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: white;
+        border-left: none;
+    }
+
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        background-color: white;
+    }
+
+    .form-control::placeholder {
+        color: #6c757d;
+        font-style: italic;
+    }
+
+    /* Input group styling */
+    .input-group-text {
+        border-radius: 10px 0 0 10px;
+    }
+
+    .input-group .form-control {
+        border-radius: 0 10px 10px 0;
+        border-left: 2px solid #667eea;
+    }
+
+    .input-group .form-control:focus {
+        border-left: 2px solid #667eea;
+    }
+
+    /* Button hover effects */
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+    }
+
+    /* Tab switch hover effects */
+    .d-flex a:not(.active):hover {
+        background-color: #e9ecef !important;
+        color: #495057 !important;
+    }
+
+    /* Social buttons hover */
+    .btn-outline-secondary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Custom checkbox styling */
+    .form-check-input:checked {
+        background-color: #667eea;
+        border-color: #667eea;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 576px) {
+        .card {
+            margin: 20px;
+            border-radius: 15px !important;
+        }
+
+        .card-header h2 {
+            font-size: 1.5rem !important;
+        }
+
+        .btn {
+            font-size: 1rem !important;
+        }
+    }
+</style>
+{% endblock %}

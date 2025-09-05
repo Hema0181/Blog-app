@@ -1,0 +1,232 @@
+{% extends "blogs/base_dynamic.html" %}
+
+{% block title %}{{ post.title }} - My Dynamic Blog{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <!-- Post Content Card -->
+        <div class="card mb-4" style="background-color: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-radius: 16px; border: none;">
+            <div class="card-header" style="background: linear-gradient(135deg, #4a90e2 0%, #357ABD 100%); color: white; border-radius: 16px 16px 0 0; padding: 20px;">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <h2 class="mb-1" style="font-weight: 700; font-size: 1.8rem;">{{ post.title }}</h2>
+                        <div class="d-flex align-items-center mt-2">
+                            <i class="fas fa-user-circle me-2" style="font-size: 1.2rem;"></i>
+                            <span class="fw-bold">{{ post.author.username }}</span>
+                            <span class="mx-2 text-white-50">•</span>
+                            <i class="fas fa-calendar-alt me-2"></i>
+                            <small>{{ post.created_at|date:"F j, Y \a\t g:i A" }}</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge" style="background-color: rgba(255,255,255,0.2); color: white; padding: 8px 12px; border-radius: 20px;">
+                            <i class="fas fa-eye me-1"></i>Post Details
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-4">
+                <div class="post-content" style="font-size: 1.1rem; line-height: 1.7; color: #2c3e50;">
+                    {{ post.content|linebreaks }}
+                </div>
+
+                <!-- Post Meta Information -->
+                <div class="mt-4 pt-3 border-top" style="border-color: #e9ecef !important;">
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <div class="p-3" style="background-color: #f8f9fa; border-radius: 8px;">
+                                <i class="fas fa-user fa-2x mb-2" style="color: #4a90e2;"></i>
+                                <h6 class="mb-1 fw-bold" style="color: #2c3e50;">Author</h6>
+                                <small class="text-muted">{{ post.author.username }}</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3" style="background-color: #f8f9fa; border-radius: 8px;">
+                                <i class="fas fa-calendar fa-2x mb-2" style="color: #4a90e2;"></i>
+                                <h6 class="mb-1 fw-bold" style="color: #2c3e50;">Published</h6>
+                                <small class="text-muted">{{ post.created_at|date:"M j, Y" }}</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3" style="background-color: #f8f9fa; border-radius: 8px;">
+                                <i class="fas fa-clock fa-2x mb-2" style="color: #4a90e2;"></i>
+                                <h6 class="mb-1 fw-bold" style="color: #2c3e50;">Time</h6>
+                                <small class="text-muted">{{ post.created_at|date:"g:i A" }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="card" style="background-color: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-radius: 16px; border: none;">
+            <div class="card-header" style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); color: white; border-radius: 16px 16px 0 0; padding: 20px;">
+                <h4 class="mb-0">
+                    <i class="fas fa-comments me-2"></i>Comments
+                    {% if comments %}
+                        <span class="badge ms-2" style="background-color: rgba(255,255,255,0.2);">{{ comments|length }}</span>
+                    {% endif %}
+                </h4>
+            </div>
+
+            <div class="card-body p-4">
+                {% if comments %}
+                    <div class="comments-list">
+                        {% for comment in comments %}
+                        <div class="comment-item mb-4 p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #4a90e2;">
+                            <div class="d-flex align-items-start">
+                                <div class="avatar me-3">
+                                    <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #4a90e2 0%, #357ABD 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                                        {{ comment.user.username|first|upper }}
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <h6 class="mb-0 fw-bold" style="color: #2c3e50;">{{ comment.user.username }}</h6>
+                                        <small class="text-muted ms-2">
+                                            <i class="fas fa-clock me-1"></i>{{ comment.created_at|date:"M j, Y g:i A" }}
+                                        </small>
+                                    </div>
+                                    <p class="mb-0" style="color: #34495e; line-height: 1.5;">{{ comment.content }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-comment-slash fa-4x mb-4" style="color: #dee2e6;"></i>
+                        <h5 class="text-muted mb-3">No Comments Yet</h5>
+                        <p class="text-muted">Be the first to share your thoughts!</p>
+                    </div>
+                {% endif %}
+
+                <!-- Add Comment Form -->
+                {% if user.is_authenticated %}
+                <div class="mt-4">
+                    <div class="card" style="background-color: #f8f9fa; border: 2px dashed #4a90e2; border-radius: 12px;">
+                        <div class="card-header" style="background-color: #4a90e2; color: white; border-radius: 12px 12px 0 0;">
+                            <h6 class="mb-0">
+                                <i class="fas fa-plus me-2"></i>Add Your Comment
+                            </h6>
+                        </div>
+                        <div class="card-body p-4">
+                            <form method="POST">
+                                {% csrf_token %}
+
+                                <div class="mb-3">
+                                    <label for="{{ form.content.id_for_label }}" class="form-label fw-bold" style="color: #2c3e50;">
+                                        <i class="fas fa-edit me-2" style="color: #4a90e2;"></i>Your Comment
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" style="background-color: #4a90e2; color: white; border: none;">
+                                            <i class="fas fa-comment"></i>
+                                        </span>
+                                        {{ form.content }}
+                                    </div>
+                                    {% if form.content.errors %}
+                                        <div class="text-danger mt-1">
+                                            {% for error in form.content.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary px-4 py-2" style="background: linear-gradient(135deg, #4a90e2 0%, #357ABD 100%); border: none; border-radius: 20px; font-weight: 600;">
+                                        <i class="fas fa-paper-plane me-2"></i>Post Comment
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="mt-4">
+                    <div class="alert" style="background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); border: 1px solid #f39c12; border-radius: 12px; color: #8b4513;">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-info-circle fa-2x me-3"></i>
+                            <div>
+                                <h6 class="mb-1 fw-bold">Want to Join the Conversation?</h6>
+                                <p class="mb-0">You must <a href="{% url 'login' %}" class="text-decoration-none fw-bold" style="color: #e67e22;">log in</a> or <a href="{% url 'signup' %}" class="text-decoration-none fw-bold" style="color: #e67e22;">sign up</a> to add comments.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Post content styling */
+    .post-content {
+        font-family: 'Georgia', serif;
+        text-align: justify;
+    }
+
+    .post-content p {
+        margin-bottom: 1.2rem;
+    }
+
+    /* Comment styling */
+    .comment-item {
+        transition: all 0.3s ease;
+    }
+
+    .comment-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Form styling */
+    .form-control {
+        border: 2px solid #e1e4e8;
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: white;
+    }
+
+    .form-control:focus {
+        border-color: #4a90e2;
+        box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+        background-color: white;
+    }
+
+    .input-group-text {
+        border-radius: 8px 0 0 8px;
+    }
+
+    .input-group .form-control {
+        border-radius: 0 8px 8px 0;
+        border-left: none;
+    }
+
+    .input-group .form-control:focus {
+        border-left: 2px solid #4a90e2;
+    }
+
+    /* Button hover effects */
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4) !important;
+    }
+
+    /* Alert styling */
+    .alert {
+        border: none;
+    }
+
+    /* Avatar styling */
+    .avatar div {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+</style>
+{% endblock %}
