@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
-    'silk',
 ]
 
 MIDDLEWARE = [
@@ -122,13 +121,12 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 # Media files (User uploaded files)
-# https://docs.djangoproject.com/en/5.2/topics/files/
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Authentication settings
 LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'profile'
 LOGOUT_REDIRECT_URL = 'home'
 
 # Default primary key field type

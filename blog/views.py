@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as django_logout
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .forms import SignUpForm, PostForm, CommentForm, ProfileForm
+from .forms import SignUpForm, PostForm, CommentForm
 from .models import Post
 
 def home(request):
@@ -38,21 +38,45 @@ def create_post(request):
 
 @login_required
 def profile_view(request):
-    profile = request.user.profile
     user_posts = Post.objects.filter(author=request.user).order_by("-created_at")
-    return render(request, "blogs/profile.html", {"profile": profile, "user_posts": user_posts})
+    try:
+        profile = request.user.profile
+    except:
+        from .models import Profile
+        profile = Profile.objects.create(user=request.user)
+    return render(request, "blogs/profile.html", {"user_posts": user_posts, "profile": profile})
+
+from django.urls import reverse
+
+from .forms import UserProfileForm
+
+from .forms import ProfileForm
 
 @login_required
 def edit_profile(request):
-    profile = request.user.profile
+    user = request.user
+    try:
+        profile = user.profile
+    except:
+        from .models import Profile
+        profile = Profile.objects.create(user=user)
+
     if request.method == "POST":
-        form = ProfileForm(request.POST, request.FILES, instance=profile)
-        if form.is_valid():
-            form.save()
+        user_form = UserProfileForm(request.POST, instance=user)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
             return redirect("profile")
     else:
-        form = ProfileForm(instance=profile)
-    return render(request, "blogs/edit_profile.html", {"form": form})
+        user_form = UserProfileForm(instance=user)
+        profile_form = ProfileForm(instance=profile)
+
+    context = {
+        "user_form": user_form,
+        "profile_form": profile_form,
+    }
+    return render(request, "blogs/edit_profile.html", context)
 
 @login_required
 def edit_post(request, pk):

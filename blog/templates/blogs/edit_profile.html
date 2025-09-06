@@ -15,57 +15,67 @@
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
 
-                    <!-- Display Name Field -->
+                    <!-- User Form Fields -->
                     <div class="mb-3">
-                        <label for="{{ form.display_name.id_for_label }}" class="form-label">
-                            <i class="fas fa-id-card me-1"></i>Display Name
+                        <label for="{{ user_form.first_name.id_for_label }}" class="form-label">
+                            <i class="fas fa-user me-1"></i>First Name
                         </label>
-                        {{ form.display_name }}
-                        {% if form.display_name.errors %}
+                        {{ user_form.first_name }}
+                        {% if user_form.first_name.errors %}
                             <div class="text-danger small">
-                                {% for error in form.display_name.errors %}
+                                {% for error in user_form.first_name.errors %}
                                     {{ error }}
                                 {% endfor %}
                             </div>
                         {% endif %}
                     </div>
 
-                    <!-- Bio Field -->
+                    <!-- Email Field -->
                     <div class="mb-3">
-                        <label for="{{ form.bio.id_for_label }}" class="form-label">
+                        <label for="{{ user_form.email.id_for_label }}" class="form-label">
+                            <i class="fas fa-envelope me-1"></i>Email
+                        </label>
+                        {{ user_form.email }}
+                        {% if user_form.email.errors %}
+                            <div class="text-danger small">
+                                {% for error in user_form.email.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Profile Form Fields -->
+                    <div class="mb-3">
+                        <label for="{{ profile_form.bio.id_for_label }}" class="form-label">
                             <i class="fas fa-info-circle me-1"></i>Bio
                         </label>
-                        {{ form.bio }}
-                        {% if form.bio.errors %}
+                        {{ profile_form.bio }}
+                        {% if profile_form.bio.errors %}
                             <div class="text-danger small">
-                                {% for error in form.bio.errors %}
+                                {% for error in profile_form.bio.errors %}
                                     {{ error }}
                                 {% endfor %}
                             </div>
                         {% endif %}
-                        <div class="form-text">Tell others about yourself (optional)</div>
                     </div>
 
-                    <!-- Profile Picture Field -->
                     <div class="mb-4">
-                        <label for="{{ form.profile_picture.id_for_label }}" class="form-label">
+                        <label for="{{ profile_form.profile_picture.id_for_label }}" class="form-label">
                             <i class="fas fa-camera me-1"></i>Profile Picture
                         </label>
-                        {{ form.profile_picture }}
-                        {% if form.profile_picture.errors %}
+                        {{ profile_form.profile_picture }}
+                        {% if profile_form.profile_picture.errors %}
                             <div class="text-danger small">
-                                {% for error in form.profile_picture.errors %}
+                                {% for error in profile_form.profile_picture.errors %}
                                     {{ error }}
                                 {% endfor %}
                             </div>
                         {% endif %}
-                        <div class="form-text">Upload a new profile picture (optional)</div>
-
-                        <!-- Current Profile Picture Preview -->
-                        {% if profile.profile_picture %}
+                        {% if user.profile.profile_picture %}
                         <div class="mt-2">
                             <small class="text-muted">Current profile picture:</small><br>
-                            <img src="{{ profile.profile_picture.url }}"
+                            <img src="{{ user.profile.profile_picture.url }}"
                                  alt="Current Profile Picture"
                                  style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; border: 2px solid #667eea;">
                         </div>
@@ -82,20 +92,6 @@
                         </a>
                     </div>
                 </form>
-            </div>
-        </div>
-
-        <!-- Help Section -->
-        <div class="card mt-3">
-            <div class="card-body">
-                <h6 class="card-title">
-                    <i class="fas fa-question-circle me-1"></i>Tips for a Great Profile
-                </h6>
-                <ul class="list-unstyled small text-muted mb-0">
-                    <li><i class="fas fa-check text-success me-1"></i>Choose a clear, professional profile picture</li>
-                    <li><i class="fas fa-check text-success me-1"></i>Write a bio that tells visitors about you</li>
-                    <li><i class="fas fa-check text-success me-1"></i>Keep your display name appropriate and recognizable</li>
-                </ul>
             </div>
         </div>
     </div>

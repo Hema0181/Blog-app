@@ -25,9 +25,9 @@
                 <!-- Username -->
                 <h3 class="mb-2">{{ profile.user.username }}</h3>
 
-                <!-- Display Name -->
-                {% if profile.display_name %}
-                    <h5 class="text-muted mb-3">{{ profile.display_name }}</h5>
+                <!-- Full Name -->
+                {% if profile.user.first_name %}
+                    <h5 class="text-muted mb-3">{{ profile.user.first_name }} {{ profile.user.last_name }}</h5>
                 {% endif %}
 
                 <!-- Bio Section -->
